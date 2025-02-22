@@ -27,7 +27,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
       
       - name: Test Multi-Arch Build
-        run: docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/386 --load -t test-image .
+        run: docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/386 --push -t test-image .
 
   build-and-push:
     name: Build and Push Docker Image

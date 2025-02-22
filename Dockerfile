@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y curl jq gnupg nginx --no-install-recomm
 
 # Copy the speedtest script
 COPY speedtest.sh /usr/local/bin/speedtest.sh
-RUN chmod +x /usr/local/bin/speedtest.sh \
+RUN chmod +x /usr/local/bin/speedtest.sh && \
     mkdir -p /usr/share/nginx/html
 
 # Copy Nginx configuration

@@ -1,9 +1,10 @@
 FROM debian:12
 
 # Install dependecies & speedtest
-RUN apt-get update && apt-get install -y curl jq gnupg nginx && apt clean \
+# hadolint ignore=DL3006,DL3008,DL3009
+RUN apt-get update && apt-get install -y curl jq gnupg nginx --no-install-recommends && apt-get clean \
     curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | bash \
-    apt-get update && apt-get install -y speedtest \
+    apt-get update && apt-get install -y speedtest --no-install-recommends && apt-get clean \
     speedtest --version || echo "Speedtest CLI failed to install!"
 
 # Copy the speedtest script

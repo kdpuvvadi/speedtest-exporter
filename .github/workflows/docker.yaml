@@ -34,6 +34,14 @@ jobs:
 
       - name: Test Multi-Arch Build
         run: docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/386 --push -t kdpuvvadi/speedtest-exporter:dryrun .
+      
+      - name: Delete docker tag
+        id: docker_build
+        uses: xhofe/del-docker-tag@main
+        with:
+          username: kdpuvvadi
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+          tags: kdpuvvadi/speedtest-exporter:dryrun
 
   build-and-push:
     name: Build and Push Docker Image

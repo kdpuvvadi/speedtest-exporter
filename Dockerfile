@@ -3,7 +3,7 @@ FROM debian:13
 # Install dependencies
 # hadolint ignore=DL3006,DL3008,DL3009,DL4006
 RUN apt-get update && \
-    apt-get install -y curl jq gnupg apt-transport-https ca-certificates nginx && \
+    apt-get install -y --no-install-recommends curl jq gnupg apt-transport-https ca-certificates nginx && \
     rm -rf /var/lib/apt/lists/*
 
 # Add Ookla's GPG key
@@ -19,7 +19,7 @@ Signed-By: /etc/apt/trusted.gpg.d/ookla-speedtest.gpg
 EOF
 
 # Install speedtest
-RUN apt-get update && apt-get install -y speedtest && \
+RUN apt-get update && apt-get install -y --no-install-recommends speedtest && \
     rm -rf /var/lib/apt/lists/* && \
     speedtest --version || (echo "Speedtest CLI failed!" && false)
 

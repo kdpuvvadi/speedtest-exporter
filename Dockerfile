@@ -1,14 +1,27 @@
-FROM debian:12
+FROM debian:13
 
-# Install dependecies & speedtest
+# Install dependencies
 # hadolint ignore=DL3006,DL3008,DL3009,DL4006
 RUN apt-get update && \
-    apt-get install -y curl jq gnupg nginx --no-install-recommends && \
-    apt-get clean && \
-    curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | bash && \
-    apt-get update && apt-get install -y speedtest --no-install-recommends && \
-    apt-get clean && \
-    speedtest --version || echo "Speedtest CLI failed to install!"
+    apt-get install -y curl jq gnupg apt-transport-https ca-certificates nginx && \
+    rm -rf /var/lib/apt/lists/*
+
+# Add Ookla's GPG key
+RUN curl -fsSL https://packagecloud.io/ookla/speedtest-cli/gpgkey | gpg --dearmor -o /etc/apt/trusted.gpg.d/ookla-speedtest.gpg
+
+# Add Ookla repo
+RUN cat <<EOF > /etc/apt/sources.list.d/ookla-speedtest.sources
+Types: deb
+URIs: https://packagecloud.io/ookla/speedtest-cli/debian/
+Suites: trixie
+Components: main
+Signed-By: /etc/apt/trusted.gpg.d/ookla-speedtest.gpg
+EOF
+
+# Install speedtest
+RUN apt-get update && apt-get install -y speedtest && \
+    rm -rf /var/lib/apt/lists/* && \
+    speedtest --version || (echo "Speedtest CLI failed!" && false)
 
 # Copy the speedtest script
 COPY speedtest.sh /usr/local/bin/speedtest.sh

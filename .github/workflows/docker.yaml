@@ -82,6 +82,7 @@ jobs:
             type=ref,event=branch
             type=ref,event=tag
             type=sha
+            type=raw,value=latest,enable={{is_default_branch}}
           labels: |
             org.opencontainers.image.title=Speedtest Exporter
             org.opencontainers.image.description=Exporter for periodic internet speed tests

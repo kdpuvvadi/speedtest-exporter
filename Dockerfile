@@ -1,7 +1,10 @@
 FROM debian:13
 
+# hadolint global ignore=DL3008
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Install dependencies
-# hadolint ignore=DL3006,DL3008,DL3009,DL4006
 RUN apt-get update && \
     apt-get install -y --no-install-recommends curl jq gnupg apt-transport-https ca-certificates nginx && \
     rm -rf /var/lib/apt/lists/*
@@ -21,7 +24,7 @@ EOF
 # Install speedtest
 RUN apt-get update && apt-get install -y --no-install-recommends speedtest && \
     rm -rf /var/lib/apt/lists/* && \
-    speedtest --version || (echo "Speedtest CLI failed!" && false)
+    if ! speedtest --version; then echo "Speedtest CLI failed!" && exit 1; fi
 
 # Copy the speedtest script
 COPY speedtest.sh /usr/local/bin/speedtest.sh
